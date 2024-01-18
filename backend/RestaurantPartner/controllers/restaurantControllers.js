@@ -24,3 +24,16 @@ module.exports.createRestaurant = async (req, res) => {
         }
     }
 };
+
+//list all restaurants
+
+module.exports.listRestaurants = async (req, res) => {
+    try {
+        const restaurants = await Restaurant.find({});
+        res.status(200).json({ restaurants });
+    }
+    catch (error) {
+        console.error('Error listing restaurants:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

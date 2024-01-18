@@ -30,3 +30,14 @@ module.exports.createMeal = async (req, res) => {
         }
     }
 };
+
+//list meals
+module.exports.listMeals = async (req, res) => {
+    try {
+        const meals = await Meal.find({});
+        res.status(200).json({ meals });
+    } catch (error) {
+        console.error('Error listing meals:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
