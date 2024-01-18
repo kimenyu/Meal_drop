@@ -1,39 +1,32 @@
 const mongoose = require("mongoose");
-const Meal = require('./mealModel');
-const User = require('./restaurantUserModel');
+const Restaurant = require('./restaurantModel');
 
-const restaurantSchema = new mongoose.Schema({
+const mealSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please provide a name"],
         trim: true,
-        unique: true,
     },
     description: {
         type: String,
         required: [true, "Please provide a description"],
         trim: true,
     },
-    address: {
-        type: String,
-        required: [true, "Please provide an address"],
+    price: {
+        type: Number,
+        required: [true, "Please provide a price"],
         trim: true,
-        unique: true,
     },
     image: {
         type: String,
         required: [true, "Please provide an image"],
         trim: true,
     },
-    meals: [{
+    restaurant: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Meal',
-    }],
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Restaurant',
         required: true,
     },
 });
 
-module.exports = mongoose.model('Restaurant', restaurantSchema);
+module.exports = mongoose.model('Meal', mealSchema);
