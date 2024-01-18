@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const accountRoutes = require('./accounts/routes/accountRoutes');
+const restaurantUserRoutes = require('./RestaurantPartner/routes/restaurantUserRoutes');
 
 const app = express();
 const port = 5000;
@@ -36,4 +36,4 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.error("Error connecting to MongoDB:", err);
     });
 
-app.use(accountRoutes);
+app.use(restaurantUserRoutes);

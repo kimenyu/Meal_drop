@@ -26,22 +26,10 @@ const userSchema = new mongoose.Schema({
     minlength: [6, "Password should be at least 6 characters long"],
     trim: true,
   },
-  confirmPassword: {
+  role : {
     type: String,
-    validate: {
-      validator: function (value) {
-        // Only validate if the password field is present
-        return this.password ? value === this.password : true;
-      },
-      message: "Passwords do not match",
-    },
-  }
+    default: 'admin',
+  },
 });
-
-// Custom validation for confirmPassword field
-userSchema.path('confirmPassword').validate(function (value) {
-  // Only validate if the password field is present
-  return this.password ? value === this.password : true;
-}, 'Passwords do not match');
 
 module.exports = mongoose.model('User', userSchema);

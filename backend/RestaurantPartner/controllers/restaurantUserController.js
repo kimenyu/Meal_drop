@@ -1,22 +1,16 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const User = require('../db/userModel');
+const User = require('../models/restaurantUserModel');
 
 const jwtSecret = process.env.JWT_SECRET || 'kimenyublogs';
 
 module.exports.register = async (request, response) => {
-  // Validate email, password, username, and confirmPassword
+  // Validate email, password, username
   const registrationValidation = [
     body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 6 }),
     body('username').notEmpty(),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
-      }
-      return true;
-    }),
+    body('password').isLength({ min: 6 }),
   ];
 
   // Check for validation errors
