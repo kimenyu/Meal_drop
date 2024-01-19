@@ -37,3 +37,27 @@ module.exports.listRestaurants = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+//delete a restaurant
+module.exports.deleteRestaurant = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedRestaurant = await Restaurant.findByIdAndDelete(id);
+
+        // Delete all meals associated with the deleted restaurant
+        if (deletedRestaurant) {
+            const relatedMeals = await Meal.find({ _id: { $in: deletedRestaurant.meals } });
+
+            if (relatedMeals.length > 0) {
+                await Meal.deleteMany({ _id: { $in: relatedMeals.map(meal => meal._id) } });
+            }
+        }
+
+        res.status(200).json({ message: "Restaurant deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting restaurant: ", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
