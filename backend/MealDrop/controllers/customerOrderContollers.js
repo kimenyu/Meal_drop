@@ -66,3 +66,23 @@ module.exports.listMeals = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+
+//update order details
+module.exports.updateOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { status } = req.body;
+
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { status },
+            { new: true }
+        );
+
+        res.status(200).json({ order: updatedOrder });
+    } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
