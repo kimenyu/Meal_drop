@@ -55,7 +55,7 @@ module.exports.getCustomerOrders = async (req, res) => {
 };
 
 
-//list all meals for customers(should listv all meals from all restaurants)
+//list all meals for customers(should list all meals from all restaurants)
 module.exports.listMeals = async (req, res) => {
     try {
         const meals = await Meal.find({});
@@ -66,6 +66,11 @@ module.exports.listMeals = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+//todo
+//filter by restaurant
+//filter by meal
+//filter by price
 
 
 //update order details
