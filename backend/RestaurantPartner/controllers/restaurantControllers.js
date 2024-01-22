@@ -1,6 +1,7 @@
 const Restaurant = require('../models/restaurantModel');
 const Meal = require('../models/mealModel');
 const User = require('../models/restaurantUserModel');
+const order = require('../../MealDrop/models/customerOrderModel');
 
 //create a restaurant
 module.exports.createRestaurant = async (req, res) => {
@@ -61,3 +62,28 @@ module.exports.deleteRestaurant = async (req, res) => {
     }
 };
 
+//get all customer orders for a specific restaurant
+module.exports.getRestaurantOrders = async (req, res) => {
+    const restaurantId = req.params.restaurantId;
+
+    try {
+        const orders = await order.find({ restaurant: restaurantId });
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.error('Error getting restaurant orders:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+//list meals for a specific restaurant
+module.exports.listMeals = async (req, res) => {
+    const restaurantId = req.params.restaurantId;
+
+    try {
+        const meals = await Meal.find({ restaurant: restaurantId });
+        res.status(200).json({ meals });
+    } catch (error) {
+        console.error('Error listing meals:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

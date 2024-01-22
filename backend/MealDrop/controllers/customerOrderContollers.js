@@ -40,3 +40,29 @@ module.exports.createOrder = async (req, res) => {
         }
     }
 };
+
+// get all orders for a specific customer
+module.exports.getCustomerOrders = async (req, res) => {
+    const customerId = req.params.customerId;
+
+    try {
+        const orders = await Order.find({ customer: customerId });
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.error('Error getting customer orders:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+//list all meals for customers(should listv all meals from all restaurants)
+module.exports.listMeals = async (req, res) => {
+    try {
+        const meals = await Meal.find({});
+        res.status(200).json({ meals });
+        console.log(meals);
+    } catch (error) {
+        console.error('Error listing meals:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
