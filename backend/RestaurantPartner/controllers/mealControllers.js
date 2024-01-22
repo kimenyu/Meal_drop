@@ -20,7 +20,7 @@ module.exports.createMeal = async (req, res) => {
     } catch (error) {
         // Check if the error is a validation error
         if (error.name === 'ValidationError') {
-            // Handle validation errors (e.g., required fields)
+            // Handle validation errors
             const validationErrors = Object.values(error.errors).map(err => err.message);
             res.status(400).json({ errors: validationErrors });
         } else {
