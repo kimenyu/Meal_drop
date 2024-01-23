@@ -68,7 +68,26 @@ module.exports.listMeals = async (req, res) => {
 };
 
 //todo
-//filter by restaurant
+//filter by price
+module.exports.filterByPrice = async(req, res) => {
+    try {
+        const { minPrice, maxPrice } = req.query;
+    
+        const filteredMeals = await Meal.find({ price: { $gte: minPrice, $lte: maxPrice } }).sort({price: 1});
+    
+        if (filteredMeals.length === 0) {
+            res.status(404).json({ error: 'No meals found' });
+            console.log('No meals found');
+        } else {
+            res.status(200).json({ filteredMeals: filteredMeals });
+        }
+    } catch (error) {
+        console.error('Error filtering meals by price:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+    
+}
+
 //filter by meal
 //filter by price
 
