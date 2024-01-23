@@ -75,7 +75,7 @@ module.exports.getRestaurantOrders = async (req, res) => {
     }
 };
 
-//list meals for a specific restaurant
+//list meals for a specific restaurant. can also be added to customers api.
 module.exports.listMeals = async (req, res) => {
     const restaurantId = req.params.restaurantId;
 
