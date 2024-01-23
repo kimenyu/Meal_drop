@@ -1,0 +1,345 @@
+openapi: 3.0.0
+info:
+  title: MealDrop API
+  version: 1.0.0
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        customer:
+          type: string
+          format: uuid
+        restaurant:
+          type: string
+          format: uuid
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                type: string
+                format: uuid
+              quantity:
+                type: number
+            required:
+              - meal
+              - quantity
+          required:
+            - meal
+            - quantity
+        totalAmount:
+          type: number
+        status:
+          type: string
+          enum:
+            - 'pending'
+            - 'accepted'
+            - 'rejected'
+          default: 'pending'
+      required:
+        - customer
+        - restaurant
+        - meals
+        - totalAmount
+        - status
+      additionalProperties: false
+
+    Meal:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        image:
+          type: string
+        restaurant:
+          type: string
+          format: uuid
+      required:
+        - name
+        - description
+        - price
+        - image
+        - restaurant
+      additionalProperties: false
+
+    Restaurant:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        image:
+          type: string
+        owner:
+          type: string
+          format: uuid
+      required:
+        - name
+        - description
+        - address
+        - image
+        - owner
+      additionalProperties: false
+
+paths:
+  /api/v1/customerAccounts/register:
+    post:
+      summary: Register a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                username:
+                  type: string
+                password:
+                  type: string
+                  minLength: 6
+      responses:
+        '201':
+          description: Customer created successfully
+        '400':
+          description: Bad request, validation errors
+        '500':
+          description: Internal server error
+
+  /api/v1/customerAccounts/login:
+    post:
+      summary: Customer login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+        '400':
+          description: Bad request, passwords do not match
+        '404':
+          description: Username not found
+        '500':
+          description: Internal server error
+
+  /api/v1/createOrder:
+    post:
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Order created successfully
+        '400':
+          description: Bad request, validation errors
+        '500':
+          description: Internal server error
+
+  /api/v1/getAllOrders/{customerId}:
+    get:
+      summary: Get all orders for a specific customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: The ID of the customer
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /api/v1/listMeals:
+    get:
+      summary: List all meals for customers (from all restaurants)
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /api/v1/filterByPrice:
+    get:
+      summary: Filter meals by price range
+      parameters:
+        - name: minPrice
+          in: query
+          required: true
+          description: Minimum price
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          required: true
+          description: Maximum price
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: No meals found
+        '500':
+          description: Internal server error
+
+  /api/v1/updateOrderStatus/{orderId}:
+    put:
+      summary: Update order status
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the order
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: ['pending', 'accepted', 'rejected']
+              required:
+                - status
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /api/v1/createMeal:
+    post:
+      summary: Create a new meal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Meal'
+      responses:
+        '201':
+          description: Meal created successfully
+        '400':
+          description: Bad request, validation errors
+        '500':
+          description: Internal server error
+
+  /api/v1/restaurantPartner/create-restaurant:
+    post:
+      summary: Create a new restaurant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+      responses:
+        '201':
+          description: Restaurant created successfully
+        '400':
+          description: Bad request, validation errors
+        '500':
+          description: Internal server error
+
+  /api/v1/restaurantPartner/list-restaurants:
+    get:
+      summary: List all restaurants
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /api/v1/restaurantPartner/delete-restaurant/{id}:
+    delete:
+      summary: Delete a restaurant by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the restaurant to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Restaurant deleted successfully
+        '404':
+          description: Restaurant not found
+        '500':
+          description: Internal server error
+
+  /api/v1/restaurantPartner/get-restaurant-orders/{restaurantId}:
+    get:
+      summary: Get all customer orders for a specific restaurant
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          description: The ID of the restaurant
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error
+
+  /api/v1/restaurantPartner/list-meals/{restaurantId}:
+    get:
+      summary: List meals for a specific restaurant
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          description: The ID of the restaurant
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Internal server error

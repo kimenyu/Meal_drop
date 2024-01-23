@@ -5,6 +5,8 @@ const mealRoutes = require('./RestaurantPartner/routes/mealRoutes');
 const restaurantRoutes = require('./RestaurantPartner/routes/restaurantRoutes');
 const customerAccountsRoutes = require('./MealDrop/routes/customerAccountRoutes');
 const customerOrderRoutes = require('./MealDrop/routes/orderRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 
 const app = express();
 const port = 5000;
@@ -12,6 +14,8 @@ const port = 5000;
 app.set('view engine', 'ejs');  // Set the view engine to 'ejs'
 app.use(express.static('public'));
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // CORS middleware
 app.use((req, res, next) => {
