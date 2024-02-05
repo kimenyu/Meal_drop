@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const mealsController = require('../controllers/mealControllers');
 const restaurantController = require('../controllers/restaurantControllers');
+const verifyToken = require('../middleware/restaurantPartnerMiddleware');
 const router = Router();
 
 /**
@@ -34,7 +35,7 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
-router.post('/api/v1/restaurantPartner/create-restaurant', restaurantController.createRestaurant);
+router.post('/api/v1/restaurantPartner/create-restaurant', verifyToken, restaurantController.createRestaurant);
 
 /**
  * @swagger
@@ -47,7 +48,7 @@ router.post('/api/v1/restaurantPartner/create-restaurant', restaurantController.
  *       '500':
  *         description: Internal server error
  */
-router.get('/api/v1/restaurantPartner/list-restaurants', restaurantController.listRestaurants);
+router.get('/api/v1/restaurantPartner/list-restaurants', verifyToken, restaurantController.listRestaurants);
 
 /**
  * @swagger
@@ -70,7 +71,7 @@ router.get('/api/v1/restaurantPartner/list-restaurants', restaurantController.li
  *       '500':
  *         description: Internal server error
  */
-router.delete('/api/v1/restaurantPartner/delete-restaurants/:id', restaurantController.deleteRestaurant);
+router.delete('/api/v1/restaurantPartner/delete-restaurants/:id', verifyToken, restaurantController.deleteRestaurant);
 
 /**
  * @swagger
@@ -112,6 +113,6 @@ router.get('/api/v1/restaurantPartner/:restaurantId', restaurantController.getRe
  *       '500':
  *         description: Internal server error
  */
-router.get('/api/v1/restaurantPartner/list-meals/:restaurantId', restaurantController.listMeals);
+router.get('/api/v1/restaurantPartner/list-meals/:restaurantId', verifyToken, restaurantController.listMeals);
 
 module.exports = router;

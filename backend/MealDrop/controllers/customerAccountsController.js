@@ -96,6 +96,7 @@ module.exports.login = async (request, response) => {
       email: customer.email,
       token,
     });
+    
   } catch (error) {
     console.error('Login error:', error);
     response.status(500).json({

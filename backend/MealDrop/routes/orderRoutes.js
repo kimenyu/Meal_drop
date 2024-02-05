@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const orderController = require('../controllers/customerOrderContollers'); 
+const verifyToken = require('../middleware/authMiddleware');
 const router = Router();
 
 /**
@@ -21,7 +22,7 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
-router.post('/api/v1/createOrder', orderController.createOrder);
+router.post('/api/v1/createOrder', verifyToken, orderController.createOrder);
   
 /**
  * @swagger
@@ -42,7 +43,7 @@ router.post('/api/v1/createOrder', orderController.createOrder);
  *       '500':
  *         description: Internal server error
  */
-router.get('/api/v1/getAllOrders/:customerId', orderController.getCustomerOrders);
+router.get('/api/v1/getAllOrders/:customerId', verifyToken, orderController.getCustomerOrders);
 
   /**
    * @swagger
@@ -116,6 +117,11 @@ router.get('/api/v1/getAllOrders/:customerId', orderController.getCustomerOrders
    *       '500':
    *         description: Internal server error
    */
-  router.put('/api/v1/updateOrderStatus/:orderId', orderController.updateOrder);
+  router.put('/api/v1/updateOrderStatus/:orderId', verifyToken, orderController.updateOrder);
+
+  router.get('/verification', verifyToken, (req, res) => {
+    res.status(200).json({ message: 'Protected route accessed', userId: req.customerId });
+});
+
 
 module.exports = router;

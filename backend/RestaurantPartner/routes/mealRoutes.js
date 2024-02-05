@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const mealsController = require('../controllers/mealControllers');
+const verifyToken = require('../middleware/restaurantPartnerMiddleware');
 const router = Router();
 
 /**
@@ -29,7 +30,7 @@ const router = Router();
  *       '500':
  *         description: Internal server error
  */
-router.post('/api/v1/restaurantPartner/create-meal', mealsController.createMeal);
+router.post('/api/v1/restaurantPartner/create-meal', verifyToken, mealsController.createMeal);
 
 /**
  * @swagger
@@ -53,7 +54,7 @@ router.post('/api/v1/restaurantPartner/create-meal', mealsController.createMeal)
  *       '500':
  *         description: Internal server error
  */
-router.delete('/api/v1/restaurantPartner/delete-meal/:id', mealsController.deleteMeal);
+router.delete('/api/v1/restaurantPartner/delete-meal/:id', verifyToken, mealsController.deleteMeal);
 
 /**
  * @swagger
@@ -83,6 +84,6 @@ router.delete('/api/v1/restaurantPartner/delete-meal/:id', mealsController.delet
  *       '500':
  *         description: Internal server error
  */
-router.put('/api/v1/restaurantPartner/update-meal/:id', mealsController.updateMeal);
+router.put('/api/v1/restaurantPartner/update-meal/:id', verifyToken, mealsController.updateMeal);
 
 module.exports = router;

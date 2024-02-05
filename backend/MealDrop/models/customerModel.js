@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'customer',
   },
+  address: {
+    type: String
+  },
 });
 
 module.exports = mongoose.model('Customer', userSchema);

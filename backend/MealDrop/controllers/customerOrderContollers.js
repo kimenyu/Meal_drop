@@ -1,6 +1,7 @@
 const Order = require('../models/customerOrderModel');
 const Customer = require('../models/customerModel');
 const Meal = require('../../RestaurantPartner/models/mealModel');
+const verifyToken = require('../middleware/authMiddleware');
 
 // create an order
 module.exports.createOrder = async (req, res) => {
@@ -67,7 +68,7 @@ module.exports.listMeals = async (req, res) => {
     }
 };
 
-//todo
+
 //filter by price
 module.exports.filterByPrice = async(req, res) => {
     try {
@@ -89,7 +90,6 @@ module.exports.filterByPrice = async(req, res) => {
 }
 
 //filter by meal
-//filter by price
 
 
 //update order details
