@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/restaurantUserModel');
 
-const jwtSecret = process.env.JWT_SECRET || 'kimenyublogs';
+const jwtSecret = process.env.JWT_SECRET;
 
 module.exports.register = async (request, response) => {
   // Validate email, password, username
