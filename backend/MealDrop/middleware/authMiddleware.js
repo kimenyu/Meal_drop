@@ -1,6 +1,6 @@
 const Customer = require('../models/customerModel');
 const jwt = require('jsonwebtoken');
-const jwtSecret = process.env.JWT_SECRET || 'kimenyublogs';
+const jwtSecret = process.env.JWT_SECRET;
 
 function verifyToken(req, res, next) {
     const token = req.header('Authorization');
